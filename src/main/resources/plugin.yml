@@ -1,0 +1,10 @@
+name: reEquipment
+version: '${project.version}'
+main: org.reuac.reequipment.ReEquipment
+api-version: '1.13'
+depend: [Vault]
+softdepend: [CMI]
+commands:
+  recl:
+    description: "recl"
+    permission: reequipment.main
