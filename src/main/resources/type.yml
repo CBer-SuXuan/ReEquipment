@@ -1,0 +1,48 @@
+Type:
+  #武器
+  Arms:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    # 包含的类型
+    types:
+      - IRON_SWORD
+      - NETHERITE_AXE
+      - NETHERITE_SWORD
+      - IRON_AXE
+      - DIAMOND_AXE
+      - DIAMOND_SWORD
+  #防具
+  Armor:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    # 包含的类型
+    types:
+      - DIAMOND_HELMET
+      - DIAMOND_CHESTPLATE
+      - DIAMOND_LEGGINGS
+      - DIAMOND_BOOTS
+      - NETHERITE_HELMET
+      - NETHERITE_CHESTPLATE
+      - NETHERITE_LEGGINGS
+      - NETHERITE_BOOTS
+      - ELYTRA
+      - SHIELD
+  # 自定义
+  wode:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    types:
+      - BOW
+      - CROSSBOW
+      - TRIDENT
+
+  # 可以按照如上的自定义格式继续自定义

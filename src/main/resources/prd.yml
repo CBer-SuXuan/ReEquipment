@@ -1,0 +1,62 @@
+# ==========================================
+# ReEquipment - 独立概率与里程碑配置文件 (PRD)
+# ==========================================
+
+# 安全里程碑设定
+# 如果强化失败导致掉级，武器等级绝对不会低于以下设定的等级。
+# 比如设定了 4, 8, 10，那么如果在 +11 升 +12 失败了，最多只会掉到 +10。
+SafeMilestones:
+  - 4
+  - 8
+  - 10
+
+# 1-12 级独立 PRD 概率配置
+Levels:
+  1:
+    baseRate: 40    # 首次强化基础概率 (40%)
+    stepRate: 10    # 每次失败增加的概率 (+10%)
+    maxCap: 60      # 概率绝对上限 (最高60%)
+  2:
+    baseRate: 35
+    stepRate: 8
+    maxCap: 60
+  3:
+    baseRate: 30
+    stepRate: 6
+    maxCap: 60
+  4:
+    baseRate: 25
+    stepRate: 5
+    maxCap: 60
+  5:
+    baseRate: 20
+    stepRate: 5
+    maxCap: 60
+  6:
+    baseRate: 15
+    stepRate: 4
+    maxCap: 60
+  7:
+    baseRate: 12
+    stepRate: 4
+    maxCap: 60
+  8:
+    baseRate: 9
+    stepRate: 3
+    maxCap: 60
+  9:
+    baseRate: 6
+    stepRate: 3
+    maxCap: 60
+  10:
+    baseRate: 4
+    stepRate: 2
+    maxCap: 60
+  11:
+    baseRate: 2
+    stepRate: 2
+    maxCap: 60
+  12:
+    baseRate: 1
+    stepRate: 1
+    maxCap: 60

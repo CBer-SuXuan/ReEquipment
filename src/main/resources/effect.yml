@@ -1,0 +1,21 @@
+Effects:
+  1:
+    Arms:
+      # 伤害加成
+      # 造成伤害时，在进行防御的减伤计算之前，对造成的伤害额外增加的值
+      damageBonus: 100
+    Armor:
+      # 防御值
+      # 受到伤害且攻击者为玩家时，最终结算好伤害后，额外减少伤害
+      defense: 10
+    wode:
+      # 伤害加成
+      # 造成伤害时，在进行防御的减伤计算之前，对造成的伤害额外增加的值
+      damageBonus: 2.5
+  2:
+    Arms:
+      damageBonus: 200
+    Armor:
+      defense: 0.4
+    wode:
+      damageBonus: 5
