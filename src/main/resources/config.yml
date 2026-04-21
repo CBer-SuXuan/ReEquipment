@@ -1,5 +1,10 @@
 #插件指令前缀
-Prefix: '&7[&d淬炼&7] '
+Prefix: '&6[海绵强化]'
+
+# 淬炼成本
+Cost:
+  Money: 100
+  MaterialAmount: 1
 
 #声音提示，填写#视为禁用
 Sound:
@@ -48,10 +53,6 @@ ItemName:
   TRIDENT: '三叉戟'
   CROSSBOW: '弩箭'
   SHIELD: '盾牌'
-
-Cost:
-  Money: 100
-  MaterialAmount: 1
 
 bottomLores:
   - "材质"

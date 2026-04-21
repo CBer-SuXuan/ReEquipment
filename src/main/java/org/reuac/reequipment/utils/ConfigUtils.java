@@ -1,64 +1,63 @@
 package org.reuac.reequipment.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.reuac.reequipment.ReEquipment;
-import org.reuac.reequipment.model.Level;
-import org.reuac.reequipment.model.LevelEffect;
-import org.reuac.reequipment.model.LevelLores;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConfigUtils {
 
 	public static Sound getSound(String soundName) {
-		if (soundName == null || soundName.equals("#")) {
-			return null;
-		}
+		if (soundName == null || soundName.equals("#")) return null;
 		try {
 			return Sound.valueOf(soundName.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			System.out.println("Invalid sound name: " + soundName);
 			return null;
 		}
 	}
 
-	public static Level loadLevelFromConfig(FileConfiguration config, int levelNumber) {
-		String path = "Level." + levelNumber;
-		int money = config.getInt(path + ".money", 0);
-		int materialAmount = config.getInt(path + ".materialAmount", 0);
-		int successRate = config.getInt(path + ".successRate", 0);
-
-		Map<String, LevelEffect> levelEffects = new HashMap<>();
-		ConfigurationSection effectSection = config.getConfigurationSection(path + ".effect");
-		if (effectSection != null) {
-			for (String type : effectSection.getKeys(false)) {
-				String effectPath = path + ".effect." + type;
-				// 重新添加 effectiveArea 的读取,从 ReEquipment.equipmentTypes 获取
-				String effectiveArea = ReEquipment.equipmentTypes.get(type);
-				double damageBonus = config.getDouble(effectPath + ".damageBonus", 0);
-				double defense = config.getDouble(effectPath + ".defense", 0);
-				// 将 effectiveArea 传递给 LevelEffect 的构造函数
-				levelEffects.put(type, new LevelEffect(damageBonus, defense, effectiveArea));
+	public static ItemStack loadItemStackFromConfig(FileConfiguration config, String path, Plugin plugin) {
+		if (config.getBoolean(path + ".setNormal", false)) {
+			try {
+				return new ItemStack(Material.valueOf(config.getString(path + ".materialType", "STONE")));
+			} catch (Exception e) {
+				return new ItemStack(Material.STONE);
 			}
 		}
 
-		Map<String, LevelLores> levelLores = new HashMap<>();
-		ConfigurationSection loresSection = config.getConfigurationSection(path + ".lores");
-		if (loresSection != null) {
-			for (String type : loresSection.getKeys(false)) {
-				List<String> lores = config.getStringList(path + ".lores." + type).stream()
-						.map(s -> ChatColor.translateAlternateColorCodes('&', s))
-						.collect(Collectors.toList());
-				levelLores.put(type, new LevelLores(lores));
-			}
+		String displayName = ChatColor.translateAlternateColorCodes('&', config.getString(path + ".displayName", ""));
+		String materialType = config.getString(path + ".materialType", "STONE");
+		List<String> lores = config.getStringList(path + ".lores").stream()
+				.map(s -> ChatColor.translateAlternateColorCodes('&', s))
+				.collect(Collectors.toList());
+		boolean glow = config.getBoolean(path + ".glow", false);
+
+		ItemStack itemStack;
+		try {
+			itemStack = new ItemStack(Material.valueOf(materialType));
+		} catch (IllegalArgumentException e) {
+			plugin.getLogger().warning("未知的物品类型: " + materialType);
+			itemStack = new ItemStack(Material.STONE);
 		}
 
-		return new Level(money, materialAmount, successRate, levelEffects, levelLores);
+		ItemMeta meta = itemStack.getItemMeta();
+		if (meta != null) {
+			meta.setDisplayName(displayName);
+			meta.setLore(lores);
+			if (glow) {
+				meta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, false);
+				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			}
+			itemStack.setItemMeta(meta);
+		}
+		return itemStack;
 	}
 }

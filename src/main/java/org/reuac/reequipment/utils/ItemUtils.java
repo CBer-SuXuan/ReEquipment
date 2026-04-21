@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reuac.reequipment.ReEquipment;
+import org.reuac.reequipment.manager.DataManager;
 import org.reuac.reequipment.model.EquipmentType;
 import org.reuac.reequipment.model.Level;
 import org.reuac.reequipment.model.LevelLores;
@@ -21,14 +22,17 @@ import java.util.regex.Pattern;
 import static org.bukkit.Bukkit.getLogger;
 
 public class ItemUtils {
+
+	private static final DataManager dataManager = ReEquipment.getInstance().getDataManager();
+
 	public static EquipmentType getEquipmentType(ItemStack item) {
 		if (item == null || item.getType() == Material.AIR) {
 			return null;
 		}
 		String materialName = item.getType().toString();
-		for (Map.Entry<String, List<String>> entry : ReEquipment.equipmentTypeMaterials.entrySet()) {
+		for (Map.Entry<String, List<String>> entry : dataManager.getEquipmentTypeMaterials().entrySet()) {
 			if (entry.getValue().contains(materialName)) {
-				String effectiveArea = ReEquipment.equipmentTypes.get(entry.getKey());
+				String effectiveArea = dataManager.getEquipmentTypes().get(entry.getKey());
 				return new EquipmentType(entry.getKey(), effectiveArea);
 			}
 		}
@@ -45,9 +49,9 @@ public class ItemUtils {
 		}
 
 		List<String> lore = meta.getLore();
-		for (int i = 0; i < lore.size(); i++) {
-			String line = lore.get(i);
-			for (Map.Entry<Integer, Level> entry : ReEquipment.levels.entrySet()) {
+		if (lore == null || lore.isEmpty()) return 0;
+		for (String line : lore) {
+			for (Map.Entry<Integer, Level> entry : dataManager.getLevels().entrySet()) {
 				Level level = entry.getValue();
 				for (Map.Entry<String, LevelLores> loresEntry : level.getLores().entrySet()) {
 					if (loresEntry.getValue().getLores().contains(line)) {
@@ -61,14 +65,13 @@ public class ItemUtils {
 
 	public static void setTemperingLevel(ItemStack item, int level, EquipmentType type) {
 		ItemMeta meta = item.getItemMeta();
-		List<String> lore = new ArrayList<>();
+		List<String> lore;
+		if (meta == null) return;
 
+		lore = meta.getLore();
+		if (lore == null || lore.isEmpty()) return;
 
-		if (meta.hasLore()) {
-			lore = meta.getLore();
-		}
-
-		Level targetLevel = ReEquipment.levels.get(level);
+		Level targetLevel = dataManager.getLevels().get(level);
 
 		if (targetLevel == null) {
 			getLogger().warning("尝试设置一个不存在的等级: " + level);
@@ -82,8 +85,8 @@ public class ItemUtils {
 			return;
 		}
 
-		for (int i = 1; i <= ReEquipment.levels.lastKey(); i++) {
-			Level existingLevel = ReEquipment.levels.get(i);
+		for (int i = 1; i <= dataManager.getLevels().lastKey(); i++) {
+			Level existingLevel = dataManager.getLevels().get(i);
 			if (existingLevel != null) {
 				LevelLores existingLores = existingLevel.getLores().get(type.getTypeName());
 				if (existingLores != null) {
@@ -96,7 +99,7 @@ public class ItemUtils {
 		for (int i = 0; i < lore.size(); i++) {
 			String currentLine = lore.get(i);
 			boolean foundKeyword = false;
-			for (String keyword : ReEquipment.bottomLores) {
+			for (String keyword : dataManager.getBottomLores()) {
 				if (keyword != null && currentLine != null && currentLine.contains(keyword)) {
 					foundKeyword = true;
 					break;
@@ -146,7 +149,7 @@ public class ItemUtils {
 		int remaining = amount;
 		for (int i = 0; i < player.getInventory().getSize(); i++) {
 			ItemStack item = player.getInventory().getItem(i);
-			if (item != null && areItemStacksEqual(item, itemToRemove)) {
+			if (areItemStacksEqual(item, itemToRemove)) {
 				if (item.getAmount() <= remaining) {
 					remaining -= item.getAmount();
 					player.getInventory().setItem(i, null);
@@ -173,16 +176,16 @@ public class ItemUtils {
 		}
 
 		String materialName = item.getType().toString();
-		String defaultName = ReEquipment.itemNames.get(materialName);
+		String defaultName = dataManager.getItemNames().get(materialName);
 		String displayName = meta.getDisplayName();
 
 		// 如果没有自定义名称, 则使用物品的材料名作为 key
 		if (defaultName == null) {
-			defaultName = ReEquipment.itemNames.get(materialName);
+			defaultName = dataManager.getItemNames().get(materialName);
 		}
 
 		// 检查是否已有自定义名称
-		if (displayName == null || displayName.isEmpty() || !meta.hasDisplayName()) {
+		if (displayName.isEmpty() || !meta.hasDisplayName()) {
 			// 没有自定义名称，使用默认名称
 			if (defaultName != null) {
 				meta.setDisplayName(defaultName + " +%level%".replace("%level%", String.valueOf(level)));
@@ -213,6 +216,7 @@ public class ItemUtils {
 		if (item == null || !item.hasItemMeta()) return 0;
 
 		ItemMeta meta = item.getItemMeta();
+		if (meta == null) return 0;
 		// 创建一个唯一的键，例如 "reequipment:prd_fail_11"
 		NamespacedKey key = new NamespacedKey(JavaPlugin.getPlugin(ReEquipment.class), "prd_fail_" + targetLevel);
 
@@ -227,6 +231,7 @@ public class ItemUtils {
 		if (item == null || !item.hasItemMeta()) return;
 
 		ItemMeta meta = item.getItemMeta();
+		if (meta == null) return;
 		NamespacedKey key = new NamespacedKey(JavaPlugin.getPlugin(ReEquipment.class), "prd_fail_" + targetLevel);
 
 		if (newCount <= 0) {
