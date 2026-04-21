@@ -1,0 +1,36 @@
+prefix: '<gold>[海绵强化] '
+
+# ====================
+#   基础系统提示
+# ====================
+no-permission: '<red>你没有权限使用该指令.'
+only-player: '<red>仅允许玩家使用该指令.'
+too-fast: '<yellow>您操作过快了,请稍后再试。'
+reload-success: '<green>配置重载成功!'
+invalid-number: '<red>此处仅允许输入数字.'
+give-usage: '<red>使用方法: /recl give t [数量]'
+admin-success: '<green>管理员强化成功!'
+
+# ====================
+#   强化流程提示
+# ====================
+empty-item: '<red>您现在是空手! 手持武器或防具再来吧!'
+no-type: '<red>该物品不是可强化的类型.'
+cannot-tempering: '<red>该装备已达到最高等级，无法继续强化.'
+no-money: '<red>强化到下一级需要 <gold><money> <red>金钱.'
+no-material: '<red>您背包中没有足够的强化材料了!'
+success: '<green>恭喜你强化成功！<gray>(本次成功率: <rate>%)'
+drop: '<red>很遗憾, 强化失败, <yellow><drop_level>'
+defeat: '<red>强化失败, 装备不变.'
+prd-compensation: '<gray> [系统] 武器记住了你的汗水... 下次冲击 <aqua>+<next_level> <gray>成功率提升至 <green><rate>%'
+
+# ====================
+#   帮助菜单提示
+# ====================
+help-header: '<gray><st>----------------------------------------'
+help-title: '<aqua><b>ReEquipment <gray>- <green>装备强化系统'
+help-start: '<yellow>/recl start <gray>- <green>开始强化'
+help-admin: '<yellow>/recl adminstart <gray>- <green>管理员强制强化(100%)'
+help-reload: '<yellow>/recl reload <gray>- <green>重载插件配置'
+help-give: '<yellow>/recl give t [数量] <gray>- <green>获取强化石'
+help-footer: '<gray><st>----------------------------------------'

@@ -1,6 +1,8 @@
 package org.reuac.reequipment.utils;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ConfigUtils {
 
@@ -33,11 +35,7 @@ public class ConfigUtils {
 			}
 		}
 
-		String displayName = ChatColor.translateAlternateColorCodes('&', config.getString(path + ".displayName", ""));
 		String materialType = config.getString(path + ".materialType", "STONE");
-		List<String> lores = config.getStringList(path + ".lores").stream()
-				.map(s -> ChatColor.translateAlternateColorCodes('&', s))
-				.collect(Collectors.toList());
 		boolean glow = config.getBoolean(path + ".glow", false);
 
 		ItemStack itemStack;
@@ -50,8 +48,24 @@ public class ConfigUtils {
 
 		ItemMeta meta = itemStack.getItemMeta();
 		if (meta != null) {
-			meta.setDisplayName(displayName);
-			meta.setLore(lores);
+			MiniMessage mm = MiniMessage.miniMessage();
+
+			// 解析 DisplayName, 并强制取消原版默认的斜体 (false)
+			String displayNameRaw = config.getString(path + ".displayName", "");
+			if (!displayNameRaw.isEmpty()) {
+				Component displayName = mm.deserialize(displayNameRaw).decoration(TextDecoration.ITALIC, false);
+				meta.displayName(displayName); // 使用 Paper API 的 Component 方法
+			}
+
+			// 解析 Lores, 同样取消默认斜体
+			List<Component> lores = new ArrayList<>();
+			for (String line : config.getStringList(path + ".lores")) {
+				lores.add(mm.deserialize(line).decoration(TextDecoration.ITALIC, false));
+			}
+			if (!lores.isEmpty()) {
+				meta.lore(lores); // 使用 Paper API 的 Component 方法
+			}
+
 			if (glow) {
 				meta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, false);
 				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

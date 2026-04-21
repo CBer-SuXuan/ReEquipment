@@ -12,9 +12,9 @@ public class ConfigManager {
 	private final ReEquipment plugin;
 	private FileConfiguration config;
 	private FileConfiguration prdConfig;
-	private FileConfiguration typeConfig;
 	private FileConfiguration loreConfig;
 	private FileConfiguration effectConfig;
+	private FileConfiguration langConfig;
 
 	public ConfigManager(ReEquipment plugin) {
 		this.plugin = plugin;
@@ -25,17 +25,17 @@ public class ConfigManager {
 		// 保存默认配置（如果不存在）
 		plugin.saveDefaultConfig();
 		saveResourceIfNotExists("prd.yml");
-		saveResourceIfNotExists("type.yml");
 		saveResourceIfNotExists("lore.yml");
 		saveResourceIfNotExists("effect.yml");
+		saveResourceIfNotExists("lang.yml");
 
 		// 重新加载所有文件
 		plugin.reloadConfig();
 		config = plugin.getConfig();
 		prdConfig = loadConfig("prd.yml");
-		typeConfig = loadConfig("type.yml");
 		loreConfig = loadConfig("lore.yml");
 		effectConfig = loadConfig("effect.yml");
+		langConfig = loadConfig("lang.yml");
 	}
 
 	private void saveResourceIfNotExists(String fileName) {

@@ -1,6 +1,3 @@
-#插件指令前缀
-Prefix: '&6[海绵强化]'
-
 # 淬炼成本
 Cost:
   Money: 100
@@ -13,26 +10,54 @@ Sound:
   # 装备掉级
   downgrade: 'ITEM_BOTTLE_FILL'
 
-#信息提示
-Messages:
-  # 初始开槽
-  openTempering: ' &a装备打造已开槽.'
-  # 开始淬炼
-  startTempering: ' &a开始淬炼...'
-  # 无法继续淬炼（装备已经顶级）
-  cannotTempering: ' &a该装备已经不能再淬炼了.'
-  # 空手时尝试淬炼
-  emptyItem: ' &c您现在是空手!手持武器或装备再来吧! '
-  # 无法淬炼的装备
-  noType: ' &a该装备不是可淬炼的类型.'
-  # 金币不足
-  noMoney: ' &a淬炼到下一级需要{Money}金钱.'
-  # 强化材料不足
-  noMaterial: ' &c您已经没有足够的强化材料了!'
-  # 淬炼成功
-  success: ' &a恭喜你淬炼成功！'
-  # 淬炼失败且掉级
-  drop: ' &a很遗憾,淬炼失败,装备掉级.'
+Type:
+  #武器
+  Arms:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    # 包含的类型
+    types:
+      - IRON_SWORD
+      - NETHERITE_AXE
+      - NETHERITE_SWORD
+      - IRON_AXE
+      - DIAMOND_AXE
+      - DIAMOND_SWORD
+  #防具
+  Armor:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    # 包含的类型
+    types:
+      - DIAMOND_HELMET
+      - DIAMOND_CHESTPLATE
+      - DIAMOND_LEGGINGS
+      - DIAMOND_BOOTS
+      - NETHERITE_HELMET
+      - NETHERITE_CHESTPLATE
+      - NETHERITE_LEGGINGS
+      - NETHERITE_BOOTS
+      - ELYTRA
+      - SHIELD
+  # 自定义
+  wode:
+    # 生效区
+    # MainHand 主手
+    # OffHand 副手
+    # Armor 防具
+    effectiveArea: "MainHand"
+    types:
+      - BOW
+      - CROSSBOW
+      - TRIDENT
+
+  # 可以按照如上的自定义格式继续自定义
 
 ItemName:
   DIAMOND_HELMET: '钻石头盔'
@@ -64,23 +89,22 @@ BroadCast:
   enable: true
   # 公告内容
   messages:
-    - "&a恭喜&e %player% &a将 %item% &a淬炼到了&c&l %level% &a级."
+    - "<green>恭喜 <yellow><player> <green>将 <item> <green>强化到了 <red><b>+<level> <green>级."
   # 当升级后的等级大于等于该等级，才发布公告
   allowLevel: 10
-
 
 # 相关物品
 Article:
   # 淬炼道具
   temperingTools:
     # 物品名
-    displayName: "&b&l一级淬炼石"
+    displayName: "<aqua><b>一级强化石"
     # 物品类型
     materialType: "DIAMOND"
     # 物品描述
     lores:
-      - "&a这是一颗淬炼石"
-      - "&a这真的是一颗淬炼石。"
+      - "<green>这是一颗强化石"
+      - "<gray><i>由天地灵气孕育而成..."
     # 物品附魔效果，但是不会有任何属性显示。
     glow: true
     # 允许原版淬炼，无视上述的设定

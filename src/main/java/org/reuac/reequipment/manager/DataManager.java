@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 public class DataManager {
 
-	private String prefix;
 	private Map<String, Sound> sounds = new HashMap<>();
-	private Map<String, String> messages = new HashMap<>();
 	private Map<String, String> itemNames = new HashMap<>();
 	private Map<String, String> equipmentTypes = new HashMap<>();
 	private Map<String, List<String>> equipmentTypeMaterials = new HashMap<>();
@@ -33,13 +31,9 @@ public class DataManager {
 
 	public void load(ConfigManager configManager, ReEquipment plugin) {
 		var config = configManager.getConfig();
-		var typeConfig = configManager.getTypeConfig();
 		var prdConfig = configManager.getPrdConfig();
 		var loreConfig = configManager.getLoreConfig();
 		var effectConfig = configManager.getEffectConfig();
-
-		// 1. 加载基础设置 (config.yml)
-		prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Prefix", "&7[&d淬炼&7] "));
 
 		sounds.clear();
 		sounds.put("success", ConfigUtils.getSound(config.getString("Sound.success")));
@@ -47,19 +41,9 @@ public class DataManager {
 
 		bottomLores = config.getStringList("bottomLores");
 
-		messages.clear();
-		ConfigurationSection msgSec = config.getConfigurationSection("Messages");
-		if (msgSec != null) {
-			for (String key : msgSec.getKeys(false)) {
-				messages.put(key, prefix + ChatColor.translateAlternateColorCodes('&', msgSec.getString(key)));
-			}
-		}
-
 		broadcastEnabled = config.getBoolean("BroadCast.enable", true);
 		broadcastAllowLevel = config.getInt("BroadCast.allowLevel", 0);
-		broadcastMessages = config.getStringList("BroadCast.messages").stream()
-				.map(s -> ChatColor.translateAlternateColorCodes('&', s))
-				.collect(Collectors.toList());
+		broadcastMessages = config.getStringList("BroadCast.messages");
 
 		itemNames.clear();
 		ConfigurationSection itemNamesSec = config.getConfigurationSection("ItemName");
@@ -77,7 +61,8 @@ public class DataManager {
 		// 2. 加载装备类型 (type.yml)
 		equipmentTypes.clear();
 		equipmentTypeMaterials.clear();
-		ConfigurationSection typeSec = typeConfig.getConfigurationSection("Type");
+		// 【修改点】：将 typeConfig 替换为 config
+		ConfigurationSection typeSec = config.getConfigurationSection("Type");
 		if (typeSec != null) {
 			for (String typeName : typeSec.getKeys(false)) {
 				String effectiveArea = typeSec.getString(typeName + ".effectiveArea", "MainHand");

@@ -1,10 +1,10 @@
 package org.reuac.reequipment.commands.subcommands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.reuac.reequipment.ReEquipment;
 import org.reuac.reequipment.commands.SubCommand;
+import org.reuac.reequipment.utils.MessageUtils;
 
 public class GiveCommand implements SubCommand {
 
@@ -23,7 +23,7 @@ public class GiveCommand implements SubCommand {
 	@Override
 	public void perform(Player player, String[] args) {
 		if (args.length < 2 || !args[1].equalsIgnoreCase("t")) {
-			player.sendMessage(ChatColor.RED + "使用方法: /recl give t [数量]");
+			MessageUtils.sendMessage(player, "give-usage");
 			return;
 		}
 
@@ -32,7 +32,7 @@ public class GiveCommand implements SubCommand {
 			try {
 				amount = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				player.sendMessage(ChatColor.RED + "此处仅允许输入数字.");
+				MessageUtils.sendMessage(player, "invalid-number");
 				return;
 			}
 		}

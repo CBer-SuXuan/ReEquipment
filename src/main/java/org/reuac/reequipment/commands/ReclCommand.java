@@ -9,6 +9,7 @@ import org.reuac.reequipment.ReEquipment;
 import org.reuac.reequipment.commands.subcommands.AdminStartCommand;
 import org.reuac.reequipment.commands.subcommands.GiveCommand;
 import org.reuac.reequipment.commands.subcommands.StartCommand;
+import org.reuac.reequipment.utils.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +70,12 @@ public class ReclCommand implements CommandExecutor {
 	}
 
 	private void sendHelpMessage(Player player) {
-		player.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------");
-		player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "ReEquipment " + ChatColor.GRAY + "- " + ChatColor.GREEN + "装备淬炼插件");
-		player.sendMessage(ChatColor.YELLOW + "/recl start " + ChatColor.GRAY + "- " + ChatColor.GREEN + "开始淬炼");
-		player.sendMessage(ChatColor.YELLOW + "/recl adminstart " + ChatColor.GRAY + "- " + ChatColor.GREEN + "管理员强制淬炼");
-		player.sendMessage(ChatColor.YELLOW + "/recl reload " + ChatColor.GRAY + "- " + ChatColor.GREEN + "重载配置");
-		player.sendMessage(ChatColor.YELLOW + "/recl give t [数量] " + ChatColor.GRAY + "- " + ChatColor.GREEN + "获取淬炼石");
-		player.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------");
+		MessageUtils.sendRawMessage(player, "help-header");
+		MessageUtils.sendRawMessage(player, "help-title");
+		MessageUtils.sendRawMessage(player, "help-start");
+		MessageUtils.sendRawMessage(player, "help-admin");
+		MessageUtils.sendRawMessage(player, "help-reload");
+		MessageUtils.sendRawMessage(player, "help-give");
+		MessageUtils.sendRawMessage(player, "help-footer");
 	}
 }
