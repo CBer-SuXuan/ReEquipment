@@ -8,6 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reuac.reequipment.commands.ReclCommand;
 import org.reuac.reequipment.listeners.EntityDamageListener;
+import org.reuac.reequipment.listeners.LoreUpdateListener;
 import org.reuac.reequipment.manager.ConfigManager;
 import org.reuac.reequipment.manager.DataManager;
 
@@ -40,7 +41,8 @@ public class ReEquipment extends JavaPlugin {
 
 		getCommand("recl").setExecutor(new ReclCommand(this));
 		getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
-		getLogger().info("reEquipment 启动!");
+		getServer().getPluginManager().registerEvents(new LoreUpdateListener(), this);
+		getLogger().info("ReEquipment插件启动!");
 	}
 
 	private boolean setupEconomy() {
@@ -57,7 +59,7 @@ public class ReEquipment extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getLogger().info("reEquipment 关闭!");
+		getLogger().info("ReEquipment插件关闭!");
 	}
 
 	public void reloadPlugin() {

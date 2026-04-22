@@ -14,6 +14,7 @@ import org.reuac.reequipment.model.Level;
 import org.reuac.reequipment.model.LevelLores;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -243,5 +244,76 @@ public class ItemUtils {
 		}
 
 		item.setItemMeta(meta);
+	}
+
+	/**
+	 * 自动修复物品的 Lore 顺序
+	 * 将强化词条强制移动到底部 (bottomLores 之上)
+	 */
+	public static void fixLoreOrder(ItemStack item) {
+		if (item == null || !item.hasItemMeta()) return;
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasLore()) return;
+
+		int level = getTemperingLevel(item);
+		if (level == 0) return; // 不是强化装备，跳过
+
+		EquipmentType type = getEquipmentType(item);
+		if (type == null) return;
+
+		Level targetLevel = dataManager.getLevels().get(level);
+		if (targetLevel == null) return;
+
+		LevelLores reLores = targetLevel.getLores().get(type.getTypeName());
+		if (reLores == null) return;
+
+		List<String> originalLore = meta.getLore();
+		if (originalLore == null || originalLore.isEmpty()) return;
+
+		// 复制一份进行模拟重排操作
+		List<String> newLore = new ArrayList<>(originalLore);
+		List<String> currentReLores = new ArrayList<>();
+
+		// 1. 提取出所有的强化词条并从原列表中删除
+		Iterator<String> iterator = newLore.iterator();
+		while (iterator.hasNext()) {
+			String line = iterator.next();
+			if (reLores.getLores().contains(line)) {
+				currentReLores.add(line);
+				iterator.remove();
+			}
+		}
+
+		if (currentReLores.isEmpty()) return; // 没找到强化词条
+
+		// 2. 找到 BottomLores (如材质、皮肤) 的位置
+		int insertionIndex = -1;
+		for (int i = 0; i < newLore.size(); i++) {
+			String currentLine = newLore.get(i);
+			boolean foundKeyword = false;
+			for (String keyword : dataManager.getBottomLores()) {
+				if (keyword != null && currentLine != null && currentLine.contains(keyword)) {
+					foundKeyword = true;
+					break;
+				}
+			}
+			if (foundKeyword) {
+				insertionIndex = i;
+				break;
+			}
+		}
+
+		// 3. 将强化词条插入到正确的位置
+		if (insertionIndex != -1) {
+			newLore.addAll(insertionIndex, currentReLores);
+		} else {
+			newLore.addAll(currentReLores); // 如果没有底部标签，直接放最后
+		}
+
+		// 4. 性能优化：只有当顺序真的发生错乱时，才更新物品 NBT，防止客户端画面闪烁
+		if (!originalLore.equals(newLore)) {
+			meta.setLore(newLore);
+			item.setItemMeta(meta);
+		}
 	}
 }
