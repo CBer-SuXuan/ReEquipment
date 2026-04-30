@@ -25,47 +25,41 @@ public class EntityDamageListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntityDamage(EntityDamageEvent event) {
-		// 如果是实体造成的伤害
+		double currentDamage = event.getDamage();
+		double damageBonus = 0;
+		double defense = 0;
+
+		// 1. 如果是实体造成的伤害，尝试计算武器的强化加成
 		if (event instanceof EntityDamageByEntityEvent damageByEntityEvent) {
 
-			// 攻击者是玩家 (近战攻击)
-			if (damageByEntityEvent.getDamager() instanceof Player damager) {
+			// 【核心需求实现】：只有当受击者也是玩家时，才计算武器伤害加成 (纯 PvP 生效)
+			if (damageByEntityEvent.getEntity() instanceof Player) {
 
-				// 计算玩家的伤害加成 (无论被攻击者是谁), 近战攻击排除远程武器
-				double damageBonus = calculateDamageBonus(damager, false);
-				damageByEntityEvent.setDamage(damageByEntityEvent.getDamage() + damageBonus);
-
-				// 如果被攻击者是玩家，则计算防御减免
-				if (damageByEntityEvent.getEntity() instanceof Player player) {
-					double defense = calculateDefense(player);
-					double finalDamage = damageByEntityEvent.getDamage() - defense;
-					damageByEntityEvent.setDamage(finalDamage > 0 ? finalDamage : 0);
+				// 攻击者是玩家 (近战)
+				if (damageByEntityEvent.getDamager() instanceof Player damager) {
+					damageBonus = calculateDamageBonus(damager, false);
 				}
-			}
-			// 攻击者是抛射物
-			else if (damageByEntityEvent.getDamager() instanceof Projectile projectile) {
-				if (projectile.getShooter() instanceof Player shooter) {
-
-					// 计算玩家的伤害加成 (无论被攻击者是谁), 远程攻击包含远程武器
-					double damageBonus = calculateDamageBonus(shooter, true);
-					damageByEntityEvent.setDamage(damageByEntityEvent.getDamage() + damageBonus);
-
-					// 如果被攻击者是玩家，则计算防御减免
-					if (damageByEntityEvent.getEntity() instanceof Player player) {
-						double defense = calculateDefense(player);
-						double finalDamage = damageByEntityEvent.getDamage() - defense;
-						damageByEntityEvent.setDamage(finalDamage > 0 ? finalDamage : 0);
-					}
+				// 攻击者是抛射物 (远程)
+				else if (damageByEntityEvent.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Player shooter) {
+					damageBonus = calculateDamageBonus(shooter, true);
 				}
-			}
-		} else {
-			// 如果受伤者是玩家, 则计算防御力
-			if (event.getEntity() instanceof Player player) {
-				double defense = calculateDefense(player);
-				double finalDamage = event.getDamage() - defense;
-				event.setDamage(finalDamage > 0 ? finalDamage : 0);
 			}
 		}
+
+		// 2. 无论伤害来源是什么，只要受击者是玩家，就计算防具的防御力减免
+		// 【Bug 修复】：这样写顺便修复了原代码中“怪物打玩家(PvE)”时漏算防具防御力的问题！
+		if (event.getEntity() instanceof Player victim) {
+			defense = calculateDefense(victim);
+		}
+
+		// 3. 最终伤害统一结算
+		// 如果是玩家打怪物：damageBonus 为 0，defense 为 0，即原版伤害。
+		// 如果是怪物打玩家：damageBonus 为 0，defense 正常计算。
+		// 如果是玩家打玩家：damageBonus 正常计算，defense 正常计算。
+		double finalDamage = currentDamage + damageBonus - defense;
+
+		// 保证最终伤害不为负数
+		event.setDamage(Math.max(finalDamage, 0));
 	}
 
 	private static final java.util.Set<Material> RANGED_WEAPONS = java.util.Set.of(

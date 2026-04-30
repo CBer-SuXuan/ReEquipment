@@ -3,17 +3,87 @@ Effects:
     Arms:
       # 伤害加成
       # 造成伤害时，在进行防御的减伤计算之前，对造成的伤害额外增加的值
-      damageBonus: 100
+      damageBonus: 1.25
     Armor:
       # 防御值
       # 受到伤害且攻击者为玩家时，最终结算好伤害后，额外减少伤害
-      defense: 10
+      defense: 0.2
     wode:
-      damageBonus: 2.5
+      damageBonus: 2
   2:
     Arms:
-      damageBonus: 200
+      damageBonus: 2.5
     Armor:
       defense: 0.4
     wode:
+      damageBonus: 4
+  3:
+    Arms:
+      damageBonus: 3.75
+    Armor:
+      defense: 0.6
+    wode:
+      damageBonus: 6
+  4:
+    Arms:
       damageBonus: 5
+    Armor:
+      defense: 0.8
+    wode:
+      damageBonus: 8
+  5:
+    Arms:
+      damageBonus: 6.25
+    Armor:
+      defense: 1
+    wode:
+      damageBonus: 10
+  6:
+    Arms:
+      damageBonus: 7.5
+    Armor:
+      defense: 1.2
+    wode:
+      damageBonus: 12
+  7:
+    Arms:
+      damageBonus: 8.75
+    Armor:
+      defense: 1.4
+    wode:
+      damageBonus: 14
+  8:
+    Arms:
+      damageBonus: 10
+    Armor:
+      defense: 1.6
+    wode:
+      damageBonus: 16
+  9:
+    Arms:
+      damageBonus: 11.25
+    Armor:
+      defense: 1.8
+    wode:
+      damageBonus: 18
+  10:
+    Arms:
+      damageBonus: 12.5
+    Armor:
+      defense: 2.0
+    wode:
+      damageBonus: 20
+  11:
+    Arms:
+      damageBonus: 13.75
+    Armor:
+      defense: 2.2
+    wode:
+      damageBonus: 22
+  12:
+    Arms:
+      damageBonus: 15
+    Armor:
+      defense: 2.4
+    wode:
+      damageBonus: 24

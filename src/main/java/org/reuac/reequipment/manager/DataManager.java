@@ -1,7 +1,6 @@
 package org.reuac.reequipment.manager;
 
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +11,6 @@ import org.reuac.reequipment.model.LevelLores;
 import org.reuac.reequipment.utils.ConfigUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 public class DataManager {
@@ -49,7 +47,7 @@ public class DataManager {
 		ConfigurationSection itemNamesSec = config.getConfigurationSection("ItemName");
 		if (itemNamesSec != null) {
 			for (String material : itemNamesSec.getKeys(false)) {
-				itemNames.put(material, ChatColor.translateAlternateColorCodes('&', itemNamesSec.getString(material)));
+				itemNames.put(material, itemNamesSec.getString(material));
 			}
 		}
 
@@ -92,9 +90,7 @@ public class DataManager {
 				ConfigurationSection typeLoreSec = loreSec.getConfigurationSection(levelStr);
 				if (typeLoreSec != null) {
 					for (String type : typeLoreSec.getKeys(false)) {
-						List<String> lores = typeLoreSec.getStringList(type).stream()
-								.map(s -> ChatColor.translateAlternateColorCodes('&', s))
-								.collect(Collectors.toList());
+						List<String> lores = typeLoreSec.getStringList(type);
 						loresMap.put(type, new LevelLores(lores));
 					}
 				}

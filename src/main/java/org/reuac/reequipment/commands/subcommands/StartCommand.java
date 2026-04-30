@@ -97,8 +97,6 @@ public class StartCommand implements SubCommand {
 
 			if (roll < actualSuccessRate) {
 				// ======== 【强化成功】 ========
-				ItemUtils.setTemperingLevel(itemInHand, nextLevelIndex, equipmentType);
-				ItemUtils.setFailCountForLevel(itemInHand, nextLevelIndex, 0);
 
 				MessageUtils.sendMessage(player, "success",
 						Placeholder.unparsed("rate", String.valueOf(actualSuccessRate)));
@@ -124,6 +122,11 @@ public class StartCommand implements SubCommand {
 						Bukkit.getServer().sendMessage(broadcast);
 					}
 				}
+
+				ItemUtils.setTemperingLevel(itemInHand, nextLevelIndex, equipmentType);
+				ItemUtils.setFailCountForLevel(itemInHand, nextLevelIndex, 0);
+
+				plugin.getEconomy().withdrawPlayer(player, nextLevel.getMoney());
 
 			} else {
 				// ======== 【强化失败】 ========

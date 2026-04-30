@@ -20,19 +20,43 @@ Type:
     effectiveArea: "MainHand"
     # 包含的类型
     types:
-      - IRON_SWORD
-      - NETHERITE_AXE
-      - NETHERITE_SWORD
+      - WOODEN_SHOVEL
+      - WOODEN_PICKAXE
+      - WOODEN_AXE
+      - WOODEN_HOE
+      - WOODEN_SWORD
+      - STONE_SHOVEL
+      - STONE_PICKAXE
+      - STONE_AXE
+      - STONE_HOE
+      - STONE_SWORD
+      - IRON_SHOVEL
+      - IRON_PICKAXE
       - IRON_AXE
+      - IRON_HOE
+      - IRON_SWORD
+      - GOLDEN_SHOVEL
+      - GOLDEN_PICKAXE
+      - GOLDEN_AXE
+      - GOLDEN_HOE
+      - GOLDEN_SWORD
+      - DIAMOND_SHOVEL
+      - DIAMOND_PICKAXE
       - DIAMOND_AXE
+      - DIAMOND_HOE
       - DIAMOND_SWORD
+      - NETHERITE_SHOVEL
+      - NETHERITE_PICKAXE
+      - NETHERITE_AXE
+      - NETHERITE_HOE
+      - NETHERITE_SWORD
   #防具
   Armor:
     # 生效区
     # MainHand 主手
     # OffHand 副手
     # Armor 防具
-    effectiveArea: "MainHand"
+    effectiveArea: "Armor"
     # 包含的类型
     types:
       - DIAMOND_HELMET
@@ -43,8 +67,23 @@ Type:
       - NETHERITE_CHESTPLATE
       - NETHERITE_LEGGINGS
       - NETHERITE_BOOTS
+      - GOLDEN_HELMET
+      - GOLDEN_CHESTPLATE
+      - GOLDEN_LEGGINGS
+      - GOLDEN_BOOTS
+      - IRON_HELMET
+      - IRON_CHESTPLATE
+      - IRON_LEGGINGS
+      - IRON_BOOTS
+      - CHAINMAIL_HELMET
+      - CHAINMAIL_CHESTPLATE
+      - CHAINMAIL_LEGGINGS
+      - CHAINMAIL_BOOTS
+      - LEATHER_HELMET
+      - LEATHER_CHESTPLATE
+      - LEATHER_LEGGINGS
+      - LEATHER_BOOTS
       - ELYTRA
-      - SHIELD
   # 自定义
   wode:
     # 生效区
@@ -55,9 +94,6 @@ Type:
     types:
       - BOW
       - CROSSBOW
-      - TRIDENT
-
-  # 可以按照如上的自定义格式继续自定义
 
 ItemName:
   DIAMOND_HELMET: '钻石头盔'
@@ -91,7 +127,7 @@ BroadCast:
   messages:
     - "<green>恭喜 <yellow><player> <green>将 <item> <green>强化到了 <red><b>+<level> <green>级."
   # 当升级后的等级大于等于该等级，才发布公告
-  allowLevel: 10
+  allowLevel: 1
 
 # 相关物品
 Article:
@@ -108,4 +144,4 @@ Article:
     # 物品附魔效果，但是不会有任何属性显示。
     glow: true
     # 允许原版淬炼，无视上述的设定
-    setNormal: true
+    setNormal: false
